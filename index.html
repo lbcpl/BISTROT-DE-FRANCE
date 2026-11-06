@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Le Bistrot de France - Commande en ligne</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f6eedb;
+            --card-bg: #fffdf9;
+            --header-dark: #671714;
+            --header-phone: #222222;
+            --text-main: #521915;
+            --text-dark: #2a110e;
+            --accent-blue: #2974a6;
+            --border-color: #d1b894;
+            --shadow: 0 10px 25px rgba(103, 23, 20, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            font-family: 'Lora', serif;
+            line-height: 1.5;
+            padding: 15px 10px 280px; 
+        }
+
+        .menu-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            padding: 20px 15px;
+            box-shadow: var(--shadow);
+            border-radius: 4px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--header-phone);
+            letter-spacing: 1px;
+        }
+
+        .restaurant-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--header-dark);
+            margin: 5px 0 2px;
+            line-height: 1.1;
+        }
+
+        .restaurant-subtitle {
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .restaurant-contact {
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--header-dark);
+            margin-bottom: 15px;
+        }
+
+        .price-banner {
+            border-top: 2px solid var(--header-dark);
+            border-bottom: 2px solid var(--header-dark);
+            padding: 8px 5px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .price-banner h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--header-dark);
+        }
+
+        .price-banner .price {
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+
+        .price-banner .subtext {
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-top: 2px;
+        }
+
+        .customization-box {
+            font-size: 0.88rem;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .customization-box p {
+            font-style: italic;
+            color: var(--text-dark);
+        }
+
+        .customization-box .blue-text {
+            color: var(--accent-blue);
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        .day-section {
+            margin-bottom: 22px;
+        }
+
+        .day-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--text-dark);
+            padding-bottom: 3px;
+            margin-bottom: 12px;
+            text-transform: lowercase;
+        }
+
+        .day-title::first-letter {
+            text-transform: uppercase;
+        }
+
+        .holiday-notice {
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            text-align: center;
+            padding: 12px 0;
+            font-style: italic;
+        }
+
+        .dish-card {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(209, 184, 148, 0.6);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .dish-card.ordered {
+            background: #e9ecef !important;
+            border-color: #adb5bd !important;
+            opacity: 0.75;
+        }
+
+        .dish-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .dish-name {
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            flex: 1;
+        }
+
+        .dish-card.ordered .dish-name {
+            color: #495057;
+            text-decoration: line-through;
+        }
+
+        .badge-ordered {
+            display: none;
+            background: #6c757d;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .dish-card.ordered .badge-ordered {
+            display: inline-block;
+        }
+
+        .dish-desc {
+            font-style: italic;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .dish-card.ordered .dish-desc {
+            color: #6c757d;
+        }
+
+        .dish-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        .dish-card.ordered .dish-options {
+            background: rgba(200, 200, 200, 0.3);
+            pointer-events: none;
+        }
+
+        .option-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 3px;
+            font-size: 0.78rem;
+        }
+
+        .option-group select {
+            width: 100%;
+            padding: 6px 4px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: white;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.78rem;
+            color: var(--text-dark);
+        }
+
+        .order-action {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .qty-input {
+            width: 55px;
+            padding: 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .btn-add {
+            background: var(--header-dark);
+            color: white;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .dish-card.ordered .btn-add {
+            background: #ff5252 !important;
+            cursor: pointer !important;
+        }
+
+        /* PANIER FIXE UNIVERSEL */
+        .cart-wrapper {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 99999;
+            background: var(--header-dark);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+            padding-bottom: max(12px, env(safe-area-inset-bottom));
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .cart-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 10px 15px 8px;
+            color: white;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+        }
+
+        .order-number-tag {
+            background: #ffd992;
+            color: var(--header-dark);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+
+        .delivery-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .delivery-details input,
+        .delivery-details select {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.95);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            color: var(--text-dark);
+        }
+
+        .delivery-details select {
+            cursor: pointer;
+        }
+
+        .delivery-details input::placeholder {
+            color: #777;
+        }
+
+        /* CONSIGNES JUICE EN BAS */
+        .juice-notice {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.68rem;
+            line-height: 1.25;
+            color: #ffeb3b;
+            text-align: center;
+            margin-bottom: 8px;
+            padding: 0 5px;
+        }
+
+        .juice-notice span {
+            color: #ff5252;
+            font-weight: 800;
+        }
+
+        .cart-total-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #ffd992;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 0.95rem;
+            display: block;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 480px) {
+            .dish-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="menu-container">
+    <div class="header-top">
+        <span>5921</span>
+        <span>2485</span>
+    </div>
+
+    <h1 class="restaurant-title">Le Bistrot de France</h1>
+    <div class="restaurant-subtitle">Traiteur - Cuisine traditionnelle française Maison</div>
+    <div class="restaurant-contact">Tel/Whatsapp : 5921 2485</div>
+
+    <div class="price-banner">
+        <h2>Tous les PLATS DU JOUR sont à <span class="price">Rs 550</span></h2>
+        <div class="subtext">commande 24 heures avant</div>
+    </div>
+
+    <div class="customization-box">
+        <p><strong>Accompagnement inclus avec chaque plat, mais vous pouvez changer :</strong></p>
+        <p>pâtes fraîches <em>ou</em> purée maison <em>ou</em> Salade verte composée <span class="blue-text">+ Rs 150</span></p>
+        <p>emmental râpé <em>ou</em> Parmesan <span class="blue-text">+ Rs 50</span></p>
+    </div>
+
+    <!-- Lundi -->
+    <div class="day-section">
+        <div class="day-title">lundi 09 novembre</div>
+        <div class="holiday-notice">Jour férié, pas de livraison</div>
+    </div>
+
+    <!-- Mardi -->
+    <div class="day-section">
+        <div class="day-title">mardi 10 novembre</div>
+        
+        <div class="dish-card" id="card-mardi-1" data-id="mardi-1" data-name="Mardi - Poulet curry aux légumes">
+            <div class="dish-header">
+                <div class="dish-name">1. Poulet curry aux légumes et riz</div>
+                <span class="badge-ordered">Ajouté</span>
+            </div>
+            <div class="dish-desc">Poulet, poivrons, carottes, petit pois, oignons, crème COCO, riz</div>
+            <div class="dish-options">
+                <div class="option-group">
+                    <label>Accompagnement :</label>
+                    <select class="acc-select">
+                        <option value="Inclus (Riz)" data-price="0">Inclus (Riz)</option>
+                        <option value="Frites (+Rs 150)" data-price="150">Frites (+Rs 150)</option>
+                        <option value="Pâtes fraîches (+Rs 150)" data-price="150">Pâtes fraîches (+Rs 150)</option>
+                        <option value="Purée maison (+Rs 150)" data-price="150">Purée maison (+Rs 150)</option>
+                        <option value="Salade verte composée (+Rs 150)" data-price="150">Salade verte composée (+Rs 150)</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label>Supplément fromage :</label>
+                    <select class="cheese-select">
+                        <option value="Aucun" data-price="0">Aucun</option>
+                        <option value="Emmental râpé (+Rs 50)" data-price="50">Emmental râpé (+Rs 50)</option>
+                        <option value="Parmesan (+Rs 50)" data-price="50">Parmesan (+Rs 50)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="order-action">
+                <input type="number" class="qty-input" value="1" min="1" max="10">
+                <button class="btn-add" id="btn-mardi-1" onclick="toggleCart('mardi-1')">Ajouter</button>
+            </div>
+        </div>
+
+        <div class="dish-card" id="card-mardi-2" data-id="mardi-2" data-name="Mardi - Salade Niçoise">
+            <div class="dish-header">
+                <div class="dish-name">2. Salade Niçoise</div>
+                <span class="badge-ordered">Ajouté</span>
+            </div>
+            <div class="dish-desc">Riz, œuf dur, thon, tomates, poivrons, maïs, oignons, olives</div>
+            <div class="dish-options" style="grid-template-columns: 1fr;">
+                <div class="option-group">
+                    <label>Supplément fromage :</label>
+                    <select class="cheese-select">
+                        <option value="Aucun" data-price="0">Aucun</option>
+                        <option value="Emmental râpé (+Rs 50)" data-price="50">Emmental râpé (+Rs 50)</option>
+                        <option value="Parmesan (+Rs 50)" data-price="50">Parmesan (+Rs 50)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="order-action">
+                <input type="number" class="qty-input" value="1" min="1" max="10">
+                <button class="btn-add" id="btn-mardi-2" onclick="toggleCart('mardi-2')">Ajouter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mercredi -->
+    <div class="day-section">
+        <div class="day-title">mercredi 11 novembre</div>
+        
+        <div class="dish-card" id="card-mercredi-1" data-id="mercredi-1" data-name="Mercredi - Tenders poulet crème moutarde">
+            <div class="dish-header">
+                <div class="dish-name">1. Tenders poulet, crème moutarde</div>
+                <span class="badge-ordered">Ajouté</span>
+            </div>
+            <div class="dish-desc">Blanc de poulet pané, panure maison, poêlé au beurre, frites</div>
+            <div class="dish-options">
+                <div class="option-group">
+                    <label>Accompagnement :</label>
+                    <select class="acc-select">
+                        <option value="Inclus (Frites)" data-price="0">Inclus (Frites)</option>
+                        <option value="Frites (+Rs 150)" data-price="150">Frites (+Rs 150)</option>
+                        <option value="Pâtes fraîches (+Rs 150)" data-price="150">Pâtes fraîches (+Rs 150)</option>
+                        <option value="Purée maison (+Rs 150)" data-price="150">Purée maison (+Rs 150)</option>
+                        <option value="Salade verte composée (+Rs 150)" data-price="150">Salade verte composée (+Rs 150)</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label>Supplément fromage :</label>
+                    <select class="cheese-select">
+                        <option value="Aucun" data-price="0">Aucun</option>
+                        <option value="Emmental râpé (+Rs 50)" data-price="50">Emmental râpé (+Rs 50)</option>
+                        <option value="Parmesan (+Rs 50)" data-price="50">Parmesan (+Rs 50)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="order-action">
+                <input type="number" class="qty-input" value="1" min="1" max="10">
+                <button class="btn-add" id="btn-mercredi-1" onclick="toggleCart('mercredi-1')">Ajouter</button>
+            </div>
+        </div>
+
+        <div class="dish-card" id="card-mercredi-2" data-id="mercredi-2" data-name="Mercredi - Salade César">
+            <div class="dish-header">
+                <div class="dish-name">2. Salade César</div>
+                <span class="badge-ordered">Ajouté</span>
+            </div>
+            <div class="dish-desc">Salade verte, émincé de blanc de poulet poêlé, curry, œuf dur, tomates, oignons</div>
+            <div class="dish-options" style="grid-template-columns: 1fr;">
+                <div class="option-group">
+                    <label>Supplément fromage :</label>
+                    <select class="cheese-select">
+                        <option value="Aucun" data-price="0">Aucun</option>
+                        <option value="Emmental râpé (+Rs 50)" data-price="50">Emmental râpé (+Rs 50)</option>
+                        <option value="Parmesan (+Rs 50)" data-price="50">Parmesan (+Rs 50)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="order-action">
+                <input type="number" class="qty-input" value="1" min="1" max="10">
+                <button class="btn-add" id="btn-mercredi-2" onclick="toggleCart('mercredi-2')">Ajouter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jeudi -->
+    <div class="day-section">
+        <div class="day-title">jeudi 12 novembre</div>
+        
+        <div class="dish-card" id="card-jeudi-1" data-id="jeudi-1" data-name="Jeudi - Pâtes à la Carbonara">
+            <div class="dish-header">
+                <div class="dish-name">1. Pâtes à la Carbonara</div>
+                <span class="badge-ordered">Ajouté</span>
+            </div>
+            <div class="dish-desc">Pâtes maison, lardons fumés de poulet, jaune d'oeuf, crème fraîche</div>
+            <div class="dish-options">
+                <div class="option-group">
+                    <label>Accompagnement :</label>
+                    <select class="acc-select">
+                        <option value="Inclus (Pâtes)" data-price="0">Inclus (Pâtes)</option>
+                        <option value="Frites (+Rs 150)" data-price="150">Frites (+Rs 150)</option>
+                        <option value="Pâtes fraîches (+Rs 150)" data-price="150">Pâtes fraîches (+Rs 150)</option>
+                        <option value="Purée maison (+Rs 150)" data-price="150">Purée maison (+Rs 150)</option>
+                        <option value="Salade verte composée (+Rs 150)" data-price="150">Salade verte composée (+Rs 150)</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label>Supplément fromage :</label>
+                    <select class="cheese-select">
+                        <option value="Aucun" data-price="0">Aucun</option>
+                        <option value="Emmental râpé (+Rs 50)" data-price="50">Emmental râpé (+Rs 50)</option>
+                        <option value="Parmesan (+Rs 50)" data-price="50">Parmesan (+Rs 50)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="order-action">
+                <input type="number" class="qty-input" value="1" min="1" max="10">
+                <button class="btn-add" id="btn-jeudi-1" onclick="toggleCart('jeudi-1')">Ajouter</button>
+            </div>
+        </div>
+
+        <div class="dish-card" id="card-jeudi-2" data-id="jeudi-2" data-name="Jeudi - Salade Piémontaise">
+            <div class="dish-header">
+                <div class="dish-name">2. Salade Piémontaise</div>
+                <span class="badge-ordered">Ajouté</span>
+            </div>
+            <div class="dish-desc">Pomme de terre, œuf dur, jambon de poulet à l'ail, pomme, poivrons, oignons, mayonnaise maison</div>
+            <div class="dish-options" style="grid-template-columns: 1fr;">
+                <div class="option-group">
+                    <label>Supplément fromage :</label>
+                    <select class="cheese-select">
+                        <option value="Aucun" data-price="0">Aucun</option>
+                        <option value="Emmental râpé (+Rs 50)" data-price="50">Emmental râpé (+Rs 50)</option>
+                        <option value="Parmesan (+Rs 50)" data-price="50">Parmesan (+Rs 50)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="order-action">
+                <input type="number" class="qty-input" value="1" min="1" max="10">
+                <button class="btn-add" id="btn-jeudi-2" onclick="toggleCart('jeudi-2')">Ajouter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vendredi -->
+    <div class="day-section">
+        <div class="day-title">vendredi 13 novembre</div>
+        
+        <div class="dish-card" id="card-vendredi-1" data-id="vendredi-1" data-name="Vendredi - Poisson pané crème moutarde">
+            <div class="dish-header">
+                <div class="dish-name">1. Poisson pané, crème moutarde</div>
+                <span class="badge-ordered">Ajouté</span>
+            </div>
+            <div class="dish-desc">Filet de poisson, panure maison, poêlé au beurre, frites</div>
+            <div class="dish-options">
+                <div class="option-group">
+                    <label>Accompagnement :</label>
+                    <select class="acc-select">
+                        <option value="Inclus (Frites)" data-price="0">Inclus (Frites)</option>
+                        <option value="Frites (+Rs 150)" data-price="150">Frites (+Rs 150)</option>
+                        <option value="Pâtes fraîches (+Rs 150)" data-price="150">Pâtes fraîches (+Rs 150)</option>
+                        <option value="Purée maison (+Rs 150)" data-price="150">Purée maison (+Rs 150)</option>
+                        <option value="Salade verte composée (+Rs 150)" data-price="150">Salade verte composée (+Rs 150)</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label>Supplément fromage :</label>
+                    <select class="cheese-select">
+                        <option value="Aucun" data-price="0">Aucun</option>
+                        <option value="Emmental râpé (+Rs 50)" data-price="50">Emmental râpé (+Rs 50)</option>
+                        <option value="Parmesan (+Rs 50)" data-price="50">Parmesan (+Rs 50)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="order-action">
+                <input type="number" class="qty-input" value="1" min="1" max="10">
+                <button class="btn-add" id="btn-vendredi-1" onclick="toggleCart('vendredi-1')">Ajouter</button>
+            </div>
+        </div>
+
+        <div class="dish-card" id="card-vendredi-2" data-id="vendredi-2" data-name="Vendredi - Salade Méditerranéenne">
+            <div class="dish-header">
+                <div class="dish-name">2. Salade Méditerranéenne</div>
+                <span class="badge-ordered">Ajouté</span>
+            </div>
+            <div class="dish-desc">Tagliatelle, thon, œuf dur, tomates, haricots verts, maïs, oignons, olives</div>
+            <div class="dish-options" style="grid-template-columns: 1fr;">
+                <div class="option-group">
+                    <label>Supplément fromage :</label>
+                    <select class="cheese-select">
+                        <option value="Aucun" data-price="0">Aucun</option>
+                        <option value="Emmental râpé (+Rs 50)" data-price="50">Emmental râpé (+Rs 50)</option>
+                        <option value="Parmesan (+Rs 50)" data-price="50">Parmesan (+Rs 50)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="order-action">
+                <input type="number" class="qty-input" value="1" min="1" max="10">
+                <button class="btn-add" id="btn-vendredi-2" onclick="toggleCart('vendredi-2')">Ajouter</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BARRE DE PANIER FIXE COMPACTE EN BAS DE L'ÉCRAN -->
+<div class="cart-wrapper">
+    <div class="cart-container">
+        <div class="cart-header">
+            <span>Panier <span class="order-number-tag" id="orderNumDisplay">N° ----</span></span>
+            <span id="cartCount">0 plat(s)</span>
+        </div>
+        
+        <!-- CHAMPS NOM, ADRESSE ET HEURE -->
+        <div class="delivery-details">
+            <input type="text" id="custName" placeholder="Nom et Prénom...">
+            <input type="text" id="custAddress" placeholder="Adresse / Bureau à Ébène...">
+            <select id="custTime">
+                <option value="">Heure souhaitée...</option>
+                <option value="11:45">11:45</option>
+                <option value="12:00">12:00</option>
+                <option value="12:15">12:15</option>
+                <option value="12:30">12:30</option>
+                <option value="12:45">12:45</option>
+                <option value="13:00">13:00</option>
+                <option value="13:15">13:15</option>
+                <option value="13:30">13:30</option>
+                <option value="13:45">13:45</option>
+                <option value="14:00">14:00</option>
+                <option value="14:15">14:15</option>
+                <option value="14:30">14:30</option>
+            </select>
+        </div>
+
+        <!-- AVERTISSEMENT JUICE -->
+        <div class="juice-notice">
+            IMPORTANT : VEUILLEZ INDIQUER VOTRE NUMERO DE COMMANDE <span id="juiceNumWarn">N° ----</span> SUR LE PAIEMENT JUICE.
+        </div>
+
+        <div class="cart-total-bar">
+            <span>Total :</span>
+            <span id="cartTotal">Rs 0</span>
+        </div>
+        <button class="btn-whatsapp" onclick="sendWhatsApp()">Envoyer la commande WhatsApp</button>
+    </div>
+</div>
+
+<script>
+    let cart = [];
+    const BASE_PRICE = 550;
+    const PHONE_NUMBER = "23059212485";
+    let currentOrderNumber = "";
+
+    function getOrderNumber() {
+        let storedNum = sessionStorage.getItem('bistrot_order_num');
+        if (!storedNum) {
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            storedNum = "BF-" + randomNum;
+            sessionStorage.setItem('bistrot_order_num', storedNum);
+        }
+        return storedNum;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        currentOrderNumber = getOrderNumber();
+        document.getElementById('orderNumDisplay').textContent = "N° " + currentOrderNumber;
+        document.getElementById('juiceNumWarn').textContent = "N° " + currentOrderNumber;
+    });
+
+    function toggleCart(dishId) {
+        const card = document.getElementById(`card-${dishId}`);
+        const btn = document.getElementById(`btn-${dishId}`);
+        const qtyInput = card.querySelector('.qty-input');
+
+        if (card.classList.contains('ordered')) {
+            cart = cart.filter(item => item.dishId !== dishId);
+            card.classList.remove('ordered');
+            btn.textContent = "Ajouter";
+            qtyInput.disabled = false;
+        } else {
+            const name = card.getAttribute('data-name');
+            
+            const accSelect = card.querySelector('.acc-select');
+            let accValue = "Inclus";
+            let accPrice = 0;
+            if (accSelect) {
+                accValue = accSelect.value;
+                accPrice = parseFloat(accSelect.options[accSelect.selectedIndex].getAttribute('data-price')) || 0;
+            }
+
+            const cheeseSelect = card.querySelector('.cheese-select');
+            const cheeseValue = cheeseSelect.value;
+            const cheesePrice = parseFloat(cheeseSelect.options[cheeseSelect.selectedIndex].getAttribute('data-price'));
+
+            const qty = parseInt(qtyInput.value) || 1;
+            const unitPrice = BASE_PRICE + accPrice + cheesePrice;
+
+            const cartItem = {
+                dishId: dishId,
+                name: name,
+                acc: accValue,
+                cheese: cheeseValue,
+                qty: qty,
+                unitPrice: unitPrice,
+                totalPrice: unitPrice * qty
+            };
+
+            cart.push(cartItem);
+
+            card.classList.add('ordered');
+            btn.textContent = "Annuler";
+            qtyInput.disabled = true;
+        }
+
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        const cartCountSpan = document.getElementById('cartCount');
+        const cartTotalSpan = document.getElementById('cartTotal');
+
+        const allCards = document.querySelectorAll('.dish-card');
+        allCards.forEach(card => {
+            const dId = card.getAttribute('data-id');
+            const isInCart = cart.some(item => item.dishId === dId);
+            const b = document.getElementById(`btn-${dId}`);
+            const q = card.querySelector('.qty-input');
+
+            if (!isInCart) {
+                card.classList.remove('ordered');
+                if (b) b.textContent = "Ajouter";
+                if (q) q.disabled = false;
+            }
+        });
+
+        if (cart.length === 0) {
+            cartCountSpan.textContent = '0 plat(s)';
+            cartTotalSpan.textContent = 'Rs 0';
+            return;
+        }
+
+        let total = 0;
+        let totalCount = 0;
+
+        cart.forEach(item => {
+            total += item.totalPrice;
+            totalCount += item.qty;
+        });
+
+        cartCountSpan.textContent = `${totalCount} plat(s)`;
+        cartTotalSpan.textContent = `Rs ${total}`;
+    }
+
+    function sendWhatsApp() {
+        if (cart.length === 0) {
+            alert('Veuillez ajouter au moins un plat à votre commande.');
+            return;
+        }
+
+        const customerName = document.getElementById('custName').value.trim();
+        const address = document.getElementById('custAddress').value.trim();
+        const deliveryTime = document.getElementById('custTime').value;
+
+        if (!customerName || !address || !deliveryTime) {
+            alert('Veuillez renseigner votre nom, votre adresse et l\'heure de livraison.');
+            return;
+        }
+
+        let message = `*COMMANDE N° ${currentOrderNumber}*\n`;
+        message += `*Le Bistrot de France*\n\n`;
+
+        message += `👤 *Client :* ${customerName}\n`;
+        message += `📍 *Adresse/Bureau :* ${address}\n`;
+        message += `⏰ *Heure souhaitée :* ${deliveryTime}\n\n`;
+
+        let grandTotal = 0;
+
+        cart.forEach((item, index) => {
+            grandTotal += item.totalPrice;
+            message += `*${index + 1}. ${item.name}*\n`;
+            message += `   • Quantité : ${item.qty}\n`;
+            if (item.acc && !item.acc.startsWith('Inclus')) {
+                message += `   • Accompagnement : ${item.acc}\n`;
+            }
+            if (item.cheese && item.cheese !== 'Aucun') {
+                message += `   • Fromage : ${item.cheese}\n`;
+            }
+            message += `   • Sous-total : Rs ${item.totalPrice}\n\n`;
+        });
+
+        message += `*TOTAL COMMANDE : Rs ${grandTotal}*\n\n`;
+        message += "Merci de me confirmer la prise en compte de la commande !";
+
+        const encodedMessage = encodeURIComponent(message);
+        window.open(`https://wa.me/${PHONE_NUMBER}?text=${encodedMessage}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
